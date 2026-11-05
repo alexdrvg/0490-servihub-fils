@@ -32,10 +32,14 @@ public final class Etapa01_Engegar {
         public void run() {
             for (int i = 1; i <= paquets; i++) {
                 // TODO FORAT 01 · Desa a la variable qui el nom del fil que està executant aquest codi ara mateix.
-                String qui = Forat.n(1);
+                String qui = Thread.currentThread().getName();
+
                 registre.add(qui + ": paquet " + i);
                 dorm(10);
             }
+        }
+
+        public void start() {
         }
     }
 
@@ -52,9 +56,9 @@ public final class Etapa01_Engegar {
         for (int i = 1; i <= quants; i++) {
             Repartidor repartidor = new Repartidor(paquets, registre);
             // TODO FORAT 02 · Crea el fil que executarà aquest repartidor, amb el nom "repartidor-" + i.
-            Thread fil = Forat.n(2);
+            Thread fil = new Thread(repartidor, "repartidor - "+i);
             // TODO FORAT 03 · Engega el fil (compte: no és el mateix que cridar run()).
-            Forat.n(3);
+            repartidor.start();
             fils.add(fil);
         }
         return fils;
