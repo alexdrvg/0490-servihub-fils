@@ -31,17 +31,17 @@ public final class Etapa10_Central {
         CountDownLatch pendents = new CountDownLatch(comandes.size());
 
         // TODO FORAT 28 · Crea un executor que fa un fil virtual nou per a cada tasca (Java 21).
-        try (ExecutorService executor = Forat.n(28)) {
+        try (ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()) {
             for (Comanda c : comandes) {
                 executor.submit(() -> {
                     Etapa01_Engegar.dorm(20); // simula preparar la comanda
                     // TODO FORAT 29 · Suma 1 al plat c.plat() del mapa de manera atòmica (merge amb Integer::sum).
-                    Forat.n(29);
+                    perPlat.merge(c.plat(), 1, Integer::sum);
                     pendents.countDown();
                 });
             }
             // TODO FORAT 30 · Espera que el comptador de pendents arribi a zero.
-            Forat.n(30);
+            pendents.await();
         }
         return perPlat;
     }
